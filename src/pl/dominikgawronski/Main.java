@@ -67,9 +67,11 @@ public class Main {
                 System.out.println("Procent z " + wynik + " to " + procent);
                 Poczatek(procent);
                 break;
-            case 8: // Case 8, Wyzerowanie wyniku, wywołuje metodę Zerowanie
+            case 8: // Case 8, Wyzerowanie wyniku, wywołuje metodę Zerowanie oraz prosi o wpisanie nowej liczby
                 System.out.println("Wyzerowano wynik");
                 wynik = Zerowanie();
+                System.out.println("Aktualna wawrtość kalkulatora: " + wynik);
+                wynik = wpiszLiczbe(wynik);
                 Poczatek(wynik);
                 break;
             case 9: // Case 9, zamykanie programu
@@ -77,6 +79,12 @@ public class Main {
                 System.exit(0);
             case 11: // Case 11, poczatek czyli menu, a dokładniej możlowości jakie program oferuje
                 Poczatek(wynik);
+                break;
+            case 12: // Case 12, po wyborze 1.1, dodawanie, wywołuje metodę dodawanie tych samych liczb, przeciążenie funkcji
+                System.out.println("Wybrałeś/aś dodawanie dwóch tych samych liczb.");
+                double suma_dwa = Dodawanie(wynik);
+                System.out.println("Suma: " + suma_dwa);
+                Poczatek(suma_dwa);
                 break;
 
         }
@@ -86,6 +94,7 @@ public class Main {
         double menu = 11; // menu = 11, czyli nadanie wartości zmiennej która będzie używana w pętli wielokrotnego wyboru Switch Case
         System.out.println("Możliwości kalkulatora: ");
         System.out.println("1. Dodawanie.");
+        System.out.println("1.1 Dodaj tą samą liczbę.");
         System.out.println("2. Odejmowanie.");
         System.out.println("3. Mnozenie.");
         System.out.println("4. Dzielenie.");
@@ -98,10 +107,15 @@ public class Main {
         System.out.print("Wybierz co chcesz zrobić: ");
         Scanner scan = new Scanner(System.in);
         String wybrana_wartosc_z_menu = scan.nextLine();
+
         if (czyCyfraJestDodatnia(wybrana_wartosc_z_menu, wynik)) { // pierwszy warunek który wyłapuje źle wpisaną liczbę
             double num_menu_double = Double.parseDouble(wybrana_wartosc_z_menu);
+            if (num_menu_double == 1.1){ // warunek sprawdzający czy chcemy dodawać tą samą liczbę
+                num_menu_double = 12;
+            }
             Wybor_menu(num_menu_double, wynik);
-        } else {
+        }
+        else {
             Error(menu, wynik);
         }
         return(wynik);
@@ -112,6 +126,10 @@ public class Main {
         return(suma);
     }
 
+    static double Dodawanie(double jeden){ // Metoda Dodawanie, dodaje dwie ale takie same w tym przypadku, przeciążenie funkcji
+        double suma = jeden + jeden;
+        return(suma);
+    }
 
     static double Odejmowanie(double jeden, double dwa){ // Metoda Odejmowanie, odejmuje dwie cyfry
         double roznica = jeden - dwa;
@@ -173,7 +191,7 @@ public class Main {
             return false;
         }
         try {
-            if ((intValue = Integer.parseInt(cyfra)) > 0 && (intValue = Integer.parseInt(cyfra)) < 10) {
+            if ((intValue = Double.parseDouble(cyfra)) > 0 && (intValue = Double.parseDouble(cyfra)) < 11) {
                 return true;
             }
             else {
