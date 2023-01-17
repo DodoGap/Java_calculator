@@ -1,6 +1,9 @@
 package pl.dominikgawronski;
 import java.util.Scanner;
 import static java.lang.Math.pow;
+// Dominik Gawroński
+// Łukasz Purzycki
+// Kamil Szymanowicz
 
 
 public class Main {
