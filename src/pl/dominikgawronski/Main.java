@@ -1,12 +1,11 @@
 package pl.dominikgawronski;
 import java.util.Scanner;
-
 import static java.lang.Math.pow;
 
 
 public class Main {
 
-    public static void main(String[] args) { // main, czyli wiadomość jaka pojawia się przy uruchamianiu programu, wywołuje od razu Menu
+    public static void main(String[] args) { // main, część główna programu, gdzie wprowadzamy pierwszą wartość do kalkulatora, jest wypisane przywitanie i wywołanie metody Początek
         System.out.println("Dzień dobry, przed Tobą prosty kalkulator.");
         double wynik = 0;
         double pierwsza_liczba = wpiszLiczbe(wynik);
@@ -62,9 +61,10 @@ public class Main {
                 break;
             case 7: // Case 7, procentowanie, wywołuje metodę ProcentzLiczby
                 System.out.println("Wybrałeś/aś Procent z liczby.");
-                System.out.print(" Wpisz ile procent z liczby " + wynik + " chciałbyś otrzymać. ");
-                double procent = ProcentzLiczby(wynik,wpiszLiczbe(wynik));
-                System.out.println("Procent z " + wynik + " to " + procent);
+                System.out.print("Wpisz ile procent z liczby " + wynik + " chciałbyś otrzymać. ");
+                double samprocent = wpiszLiczbe(wynik);
+                double procent = ProcentzLiczby(wynik,samprocent);
+                System.out.println(samprocent + "% z liczby " + wynik + " to " + procent);
                 Poczatek(procent);
                 break;
             case 8: // Case 8, Wyzerowanie wyniku, wywołuje metodę Zerowanie oraz prosi o wpisanie nowej liczby
@@ -104,19 +104,26 @@ public class Main {
         System.out.println("8. Zerowanie.");
         System.out.println("9. Wyjscie.");
         System.out.println("Aktualna wawrtość kalkulatora: " + wynik);
-        System.out.print("Wybierz co chcesz zrobić: ");
+        System.out.print("Wybierz wartość z menu, co chcesz zrobić: ");
         Scanner scan = new Scanner(System.in);
         String wybrana_wartosc_z_menu = scan.nextLine();
+        wybrana_wartosc_z_menu = wybrana_wartosc_z_menu.replaceAll(",","."); // zamiana przecinka na kropkę
 
         if (czyCyfraJestDodatnia(wybrana_wartosc_z_menu, wynik)) { // pierwszy warunek który wyłapuje źle wpisaną liczbę
             double num_menu_double = Double.parseDouble(wybrana_wartosc_z_menu);
-            if (num_menu_double == 1.1){ // warunek sprawdzający czy chcemy dodawać tą samą liczbę
+            if (num_menu_double == 1.1){ // Warunek sprawdzający czy chcemy dodawać tą samą liczbę, case 12
                 num_menu_double = 12;
             }
-            Wybor_menu(num_menu_double, wynik);
+            if (num_menu_double == 10){ // Warunek, który sprawdza czy wartość menu została wpisana jako 10
+                num_menu_double = 11;
+                System.out.println("Wybrałeś wartoś 10, czyli z poza menu, proszę, wybierz jeszcze raz.");
+                Error(menu, wynik);
+
+            }
+            Wybor_menu(num_menu_double, wynik); // Jeżeli warunki w/w spełnione program wywołuje pętle Switch Case
         }
         else {
-            Error(menu, wynik);
+            Error(menu, wynik); // Jeżeli warunki nie spełnione wywołanie metody Error, czyli ponowne wpisanie wyboru z menu lub liczby
         }
         return(wynik);
     }
@@ -152,7 +159,7 @@ public class Main {
     }
 
     static double PierwiastkowaniaDoKwadratu(double jeden){ // Metoda PierwiastkowaniaDoKwadratu, pierwiastkuje do kwadratu liczbe
-        double pierwiastek = Math.sqrt(jeden);
+        double pierwiastek = Math.sqrt(jeden); // użycie biblioteki Math
         return(pierwiastek);
     }
 
@@ -168,12 +175,12 @@ public class Main {
 
     static boolean czyWartoscJestCyfra(String cyfra, double wynik) { // Metoda sprawdzająca czy wpisana wartość jest cyfrą
         double intValue;
-        if(cyfra == null || cyfra.equals("")) {
+        if(cyfra == null || cyfra.equals("")) { // sprawdzenie czy wartość jest pusta lub czy jest Null'em
             System.out.println("Wpisana wartosc jest pusta, zacznij od nowa!");
             Wybor_menu(11,wynik);
             return false;
         }
-        try {
+        try { // sprawdzenie czy wartość da się zamienić na Double'a
             intValue = Double.parseDouble(cyfra);
             return true;
         } catch (NumberFormatException nfe) {
@@ -212,8 +219,8 @@ public class Main {
         System.out.print("Wprowadz liczbe: ");
         Scanner scan = new Scanner(System.in); // Skanowanie liczby
         String liczba = scan.nextLine();
-        if (czyWartoscJestCyfra(liczba, wynik)){
-        }
+        liczba = liczba.replaceAll(",","."); // Zamiana przecinka na kropkę
+        czyWartoscJestCyfra(liczba, wynik);
         double liczbaInt = Double.parseDouble(liczba);
         wynik = liczbaInt;
         return wynik;
